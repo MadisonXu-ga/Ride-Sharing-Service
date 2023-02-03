@@ -1,0 +1,90 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
+
+<div class="bg-light">
+    
+<div class="container">
+    <div class="py-5 text-center">
+      <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+      <h2>Request a Ride</h2>
+      <p class="lead">Please fill out the table below.</p>
+    </div>
+
+    <div class="row g-5">
+
+      {% if success_message %}
+        <div class="alert alert-success" role="alert">
+          {{ success_message }}
+        </div>
+      {% endif %}
+
+      <div class="col-md-12 col-lg-12">
+        <h4 class="mb-3">Ride Request</h4>
+        <hr class="my-4">
+        <form method="post" action="/request_ride/" class="needs-validation" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+
+            <div class="col-12">
+                <label for="desination" class="form-label">Destination</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control" id="desination" name="desination" placeholder="1234 Main St" required>
+                <div class="invalid-feedback">
+                    Your desination is required.
+                  </div>
+                </div>
+              </div>
+
+            <div class="col-12">
+                <label for="arrival_time" class="form-label">Arrival Time</label>
+                <input type="datetime-local" class="form-control" id="arrival_time" name="arrival_time" required min="{{ now }}">
+                <div class="invalid-feedback">
+                  Please choose arrive time.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                <input type="text" class="form-control" id="vehicle_type" name="vehicle_type" required>
+                <div class="invalid-feedback">
+                  Please choose vehicle type.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="num_pax" class="form-label">Num of Passengers</label>
+                <input type="number" class="form-control" id="num_pax" name="num_pax" required>
+                <div class="invalid-feedback">
+                  Please choose num of passengers.
+                </div>
+            </div>
+
+            <div class="col-12">
+              <label for="special_info" class="form-label">Special Requests <span class="text-muted">(Optional)</span></label>
+              <textarea cols="40" rows="10" class="form-control" id="special_info" name="special_info" placeholder=""></textarea>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="True" id="sharable_check" name="sharable_check">
+                <label for="sharable_check" class="form-check-label">Is_sharable</label>
+            </div>
+
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Request a ride</button>
+        </form>
+      </div>
+    </div>
+
+  <div class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2017–2022 Hungryyyyyyyyy!</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
