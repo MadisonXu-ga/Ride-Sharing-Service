@@ -1,0 +1,160 @@
+{% load static %}
+
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+<section style="background-color: #eee;">
+    <div class="container py-5">
+      
+      {% if message %}
+      <div class="alert alert-warning" role="alert">
+        {{ message }}
+      </div>
+      {% endif %}
+      
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3">{{ user.username }}</h5>
+            </div>
+          </div>
+          <!-- left bottom -->
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                    <!-- latter change to other icons -->
+                  <!-- <i class="fas fa-globe fa-lg text-warning"></i> -->
+                  <a class="mb-0 stretched-link" href="{% url 'request_ride' %}">Request a Ride</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <!-- <i class="fab fa-github fa-lg" style="color: #333333;"></i> -->
+                  <a class="mb-0" href="{% url 'get_rides' %}">My Rides</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <!-- <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i> -->
+                  <a class="mb-0" href="{% url 'search_joinable_rides' %}">Join a Ride</a>
+                </li>
+
+                <!-- driver only -->
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <!-- <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i> -->
+                  <a class="mb-0" href="{% url 'search_ride_driver' %}">Search a Ride (Driver)</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <!-- <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i> -->
+                  <a class="mb-0" href="{% url 'get_rides_driver' %}">My Rides (Driver)</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <p class="mb-4 h5"> <strong>Personal Infomation</strong></p>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Uer Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.username }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.email }}</p>
+                </div>
+              </div>
+              <hr>
+
+              <a type="button" class="btn btn-outline-primary mb-2" href="{% url 'edit_account' %}">Edit</a>
+
+            </div>
+          </div>
+
+          <!-- vehicle information -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                  <p class="mb-4 h5"> <strong>Vehicle Infomation</strong></p>
+
+                  <!-- <form method="post"> -->
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <p class="mb-0">Vehicle Type</p>
+                    </div>
+                    <div class="col-sm-7">
+                      <p class="text-muted mb-0">{% if is_driver %} {{ driver.vehicle_type }} {% else %} --- {% endif %}</p>
+                    </div>
+                  </div>
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <p class="mb-0">License Plate Number</p>
+                    </div>
+                    <div class="col-sm-7">
+                      <p class="text-muted mb-0">{% if is_driver %} {{ driver.license_plate_number }} {% else %} --- {% endif %}</p>
+                    </div>
+                  </div>
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <p class="mb-0">Maximum Number of Passengers</p>
+                    </div>
+                    <div class="col-sm-7">
+                      <p class="text-muted mb-0">{% if is_driver %} {{ driver.max_num_pax }} {% else %} --- {% endif %}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <p class="mb-0">Special Vehicle Info (Optional)</p >
+                    </div>
+                    <div class="col-sm-7">
+                      <p class="text-muted mb-0">{% if is_driver %} {{ driver.special_info }} {% else %} --- {% endif %}</p >
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-6"></div>
+                    {% if is_driver %}
+
+                    <form method="post" action="/cancel_vehicle/">
+                      {% csrf_token %}
+                    <div class="col-sm-6"></div>
+                        <button type="submit" class="btn btn-outline-primary mb-2" name="vehicle_cancel">Cancel Driver Identity</button>
+                    </div>
+                    </form>
+
+                    <div class="col-sm-6"></div>
+                        <a type="button" class="btn btn-outline-primary mb-2" name="vehicle_edit" href="{% url 'edit_vehicle' %}">Edit</a>
+                    </div>
+
+                    {% else %}
+                    <div class="col-sm-6"></div>
+                        <a type="button" class="btn btn-outline-primary mb-2" name="vehicle_register" href="{% url 'edit_vehicle' %}">Register As a Driver</a>
+                    </div>
+                    {% endif %}
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

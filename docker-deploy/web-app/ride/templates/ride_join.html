@@ -1,0 +1,131 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+            <div class="col-lg-12 mx-auto mb-4">
+            <div class="section-title text-center mb-4"><img class="d-block mx-auto" src="https://i.ibb.co/bNdG1pg/favpng-carpool-carsharing-real-time-ridesharing-transport.png" alt="" width="170" height="150">
+                <h2>Join a Ride</h2>
+                <p class="lead mb-4">You can search and join open rides.</p>
+                <!-- <h3 class="top-c-sep">Grow your career with us</h3>
+                <p>Lorem ipsum dolor sit detudzdae amet, rcquisc adipiscing elit. Aenean socada commodo
+                    ligaui egets dolor. Nullam quis ante tiam sit ame orci eget erovtiu faucid.</p> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-18 mx-auto">
+            <div class="career-search mb-60">
+
+                <form method="post" action="/search_joinable_rides/" class="career-form2 mb-60 needs-validation" novalidate>
+                    {% csrf_token %}
+
+                      <!-- change -->
+
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3 my-3">
+                            <div class="input-group position-relative has-validation">
+                                <label for="destination" class="form-label">Destination</label>
+                                <input type="text" class="form-control" id="destination" name="destination" required>
+                                <div class="invalid-feedback">
+                                    Your destination is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 my-3">
+                            <div class="input-group position-relative has-validation">
+                                <label for="earliest_arrival_time" class="form-label">Earliest Arrival Time</label>
+                                <input type="datetime-local" class="form-control" id="earliest_arrival_time" name="earliest_arrival_time" required>
+                                <div class="invalid-feedback">
+                                    Your earliest arrival time is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 my-3">
+                            <div class="input-group position-relative has-validation">
+                                <label for="latest_arrival_time" class="form-label">Latest Arrival Time</label>
+                                <input type="datetime-local" class="form-control" id="latest_arrival_time" name="latest_arrival_time" required>
+                                <div class="invalid-feedback">
+                                    Your latest arrival time is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 my-3">
+                            <div class="input-group position-relative has-validation" required>
+                                <label for="num_pax" class="form-label">Number of Passengers</label>
+                                <input type="number" class="form-control" id="num_pax" name="num_pax" min="1" required>
+                                <div class="invalid-feedback">
+                                    Your number of passengers is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 my-3" style="margin-left: 20em;">
+                            <button type="submit" class="w-100 btn btn-lg btn-block btn-light btn-custom" id="contact-submit2">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="filter-result">
+                    
+                    {% for record in records %}
+                    <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
+                        <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                            <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
+                                {{ record.id }}
+                            </div>
+                            <div class="job-content">
+                                <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
+                                    <li class="mr-md-8 mb-md-1" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-pin mr-2"></i> <span class="record-text">{{ record.destination}}</span>
+                                    </li>
+                                    <li class="mr-md-8" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-time mr-2"></i> <span class="record-text">{{ record.arrival_time}}</span>
+                                    </li>
+                                    <li class="mr-md-8" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-alert-circle-o mr-2"></i> <span class="record-text">{{ record.status}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="job-right my-4 flex-shrink-0">
+                            <a href="{% url 'join_ride' %}?ride_id={{ record.id }}&num_pax_sharer={{ num_pax_sharer }}" class="btn d-block w-100 d-sm-inline-block btn-light">More Info</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <!-- START Pagination -->
+            <div style="height: 70px;"></div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-reset justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <i class="zmdi zmdi-long-arrow-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item d-none d-md-inline-block"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item d-none d-md-inline-block"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">8</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="zmdi zmdi-long-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- END Pagination -->
+        </div>
+    </div>
+
+</div>
+{% endblock %}

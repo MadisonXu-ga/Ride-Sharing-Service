@@ -1,0 +1,76 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+            <div class="col-lg-10 mx-auto">
+            <div class="section-title text-center ">
+                <img class="d-block mx-auto" src="https://www.creativefabrica.com/wp-content/uploads/2020/07/10/Four-Car-Vector-Design-Graphic-Cartoon-Graphics-4584794-2-580x435.png" alt="" width="200" height="180">
+                <h2>Ride Status (Driver)</h2>
+                <p class="lead">You can view the status of your confirmed rides.</p>
+            </div>
+        </div>
+    </div>
+  
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="career-search mb-60">
+
+                <div class="filter-result">
+                    
+                    {% for record in ride_records %}
+                    <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
+                        <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                            <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
+                                {{ record.id }}
+                            </div>
+                            <div class="job-content">
+                                <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
+                                    <li class="mr-md-8 mb-md-1" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-pin mr-2"></i> <span class="record-text">{{ record.destination}}</span>
+                                    </li>
+                                    <li class="mr-md-8" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-time mr-2"></i> <span class="record-text">{{ record.arrival_time}}</span>
+                                    </li>
+                                    <li class="mr-md-8" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-alert-circle-o mr-2"></i> <span class="record-text">{{ record.status}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="job-right my-4 flex-shrink-0">
+                            <a href="{% url 'complete_ride_driver' %}?ride_id={{ record.id }}&num_pax={{ num_pax.value }}" class="btn d-block w-100 d-sm-inline-block btn-light">More Info</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <!-- START Pagination -->
+            <div style="height: 70px;"></div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-reset justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <i class="zmdi zmdi-long-arrow-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item d-none d-md-inline-block"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item d-none d-md-inline-block"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">8</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="zmdi zmdi-long-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- END Pagination -->
+        </div>
+    </div>
+
+</div>
+{% endblock %}

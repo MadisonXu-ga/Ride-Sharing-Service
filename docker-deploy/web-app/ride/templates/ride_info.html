@@ -1,0 +1,136 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
+
+<div class="bg-light">
+    
+<div class="container">
+    <div class="py-5 text-center">
+      <img class="d-block mx-auto mb-4" src="https://i.ibb.co/sWrdktY/investigation.png" alt="" width="160" height="140">
+      <h2>Request a Ride</h2>
+      <p class="lead">Please fill out the table below.</p>
+    </div>
+
+    <div class="row g-5">
+
+      {% if success_message %}
+        <div class="alert alert-success" role="alert">
+          {{ success_message }}
+        </div>
+      {% endif %}
+
+      <div class="col-md-12 col-lg-12">
+        <h4 class="mb-3">Ride Records</h4>
+        <hr class="my-4">
+        <form method="post" action="/edit_ride/">
+          {% csrf_token %}
+          <div class="row g-3">
+
+            <div class="col-12">
+                <label for="desination" class="form-label">Destination</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control" id="destination" name="destination" 
+                  {% if ride_record.status != "open" %} readonly required {% endif %} value="{{ ride_record.destination }}">
+                  <div class="invalid-feedback">
+                      Your desination is required.
+                  </div>
+                </div>
+              </div>
+
+            <div class="col-12">
+                <label for="arrival_time" class="form-label">Arrival Time</label>
+                <input type="datetime-local" class="form-control" id="arrival_time" name="arrival_time" 
+                {% if ride_record.status != "open" %} readonly required {% endif %} value="{{ride_record.arrival_time|date:'Y-m-d'}}T{{ride_record.arrival_time|time:'H:i:s'}}">
+                <div class="invalid-feedback">
+                  Please choose arrive time.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                <input type="text" class="form-control" id="vehicle_type" name="vehicle_type" 
+                {% if ride_record.status != "open" %} readonly required {% endif %} value="{{ ride_record.vehicle_type }}">
+                <div class="invalid-feedback">
+                  Please choose vehicle type.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="num_pax_owner" class="form-label">Num of Passengers in Your Parity</label>
+                <input type="number" class="form-control" id="num_pax_owner" name="num_pax_owner" 
+                {% if ride_record.status != "open" %} readonly required {% endif %} value="{{ ride_record.num_pax_owner }}">
+                <div class="invalid-feedback">
+                  Please choose num of passengers.
+                </div>
+            </div>
+
+            <div class="col-12">
+              <label for="special_info" class="form-label">Special Requests <span class="text-muted">(Optional)</span></label>
+              <textarea cols="40" rows="10" class="form-control" id="special_info" name="special_info" 
+              {% if ride_record.status != "open" %} readonly required {% endif %} >{{ ride_record.special_requests }}</textarea>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="True" id="sharable_check" name="sharable_check" 
+                {% if ride_record.status != "open" %} readonly required {% endif %} {% if ride_record.is_sharable %} checked {% endif %}>
+                <label for="sharable_check" class="form-check-label">Is_sharable</label>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="col-12">
+              <label for="num_pax_total" class="form-label">Num of Passengers in Total</label>
+              <input type="number" class="form-control" id="num_pax_total" name="num_pax_total" 
+               readonly required value="{{ ride_record.num_pax_total }}">
+              <div class="invalid-feedback">
+                Please choose num of passengers.
+              </div>
+            </div>
+
+            {% if ride_record.is_sharable %}
+            <label for="sharers_info" class="form-label">Sharers Info</label>
+            {% for name, num in ride_record.sharer_num.items %}
+            <div class="col-6">
+              <input type="text" class="form-control"
+               readonly required value="{{ name }}">
+            </div>
+            <div class="col-6">
+              {% with sharer_id=sharer.id %}
+              <div class="col-6">
+                <input type="text" class="form-control"
+                 readonly required value="{{ num }}">
+              </div>
+              {% endwith %}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <input type="hidden" name="ride_id" value="{{ ride_record.id }}">
+
+          <hr class="my-4">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-4" style="margin-right: 19rem;">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Confirm changes</button>
+              </div>
+              <div class="col-4 float-right">
+                <a class="w-100 btn btn-primary btn-lg" href="{% url 'get_rides' %}">Back to Previous Page</a>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  <div class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2017–2022 Hungryyyyyyyyy!</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+</div>
+
+{% endblock %}
