@@ -113,13 +113,13 @@ def ride_info(request):
     ride_id = request.GET.get('ride_id')
     print(ride_id)
     ride_record = Ride.objects.get(id=ride_id)
-    print(ride_record.arrival_time)
+    print(ride_record.special_requests)
     return render(request, 'ride_info.html', {'ride_record': ride_record})
 
 @login_required
 def edit_ride(request):
     if request.method=="POST":
-        ride_id = request.GET.get('ride_id')
+        ride_id = request.POST.get('ride_id')
         ride_record = Ride.objects.get(id=ride_id)
         print(ride_id)
         ride_record = Ride.objects.get(id=ride_id)
@@ -134,12 +134,14 @@ def edit_ride(request):
         ride_record.destination = new_destination
         ride_record.arrival_time = new_arrival_time
         ride_record.vehicle_type = new_vehicle_type
-        ride_record.num_pax_total = ride_record.num_pax_total-ride_record.num_pax_owner+new_num_pax_owner
+        ride_record.num_pax_total = ride_record.num_pax_total-ride_record.num_pax_owner+int(new_num_pax_owner)
         ride_record.num_pax_owner = new_num_pax_owner
         ride_record.special_requests = new_special_info
         ride_record.is_sharable = new_sharable_check
 
         ride_record.save()
+    
+    return redirect('/get_rides/')
 
 @login_required
 def account_info(request):
@@ -185,9 +187,10 @@ def edit_vehicle(request):
         new_vehicle_type = request.POST["vehicle_type"]
         new_license_plate_number = request.POST["license_plate_number"]
         new_max_num_pax = request.POST["max_num_pax"]
+        new_special_info = request.POST.get("special_info")
 
         if not Driver.objects.filter(user=ride_user).exists():
-            driver = Driver.objects.create(user=ride_user, vehicle_type=new_vehicle_type, license_plate_number=new_license_plate_number, max_num_pax=new_max_num_pax)
+            driver = Driver.objects.create(user=ride_user, vehicle_type=new_vehicle_type, license_plate_number=new_license_plate_number, max_num_pax=new_max_num_pax, special_info=new_special_info)
             driver.save()
             return redirect('/account_info/')
 
@@ -196,6 +199,7 @@ def edit_vehicle(request):
         driver.vehicle_type = new_vehicle_type
         driver.license_plate_number = new_license_plate_number
         driver.max_num_pax = new_max_num_pax
+        driver.special_info = new_special_info
 
         driver.save()
         return redirect('/account_info/')
@@ -275,12 +279,11 @@ def search_ride_driver(request):
     if not Driver.objects.filter(user=ride_user).exists():
         return redirect('/account_info/', {'message': "You are not a driver! You can register as a driver now!"})
     driver = Driver.objects.get(user=ride_user)
-    ride_records = Ride.objects.filter(status="open").filter(num_pax_total__lte=driver.max_num_pax).filter(vehicle_type=driver.vehicle_type)
-    # ?????????????????????????????
-    # ride_records_no_text = ride_records1.filter(special_requests__isnull=True)
-    # print(ride_records_no_text)
-    # ride_records_match_text = ride_records1.filter(special_requests=driver.special_info)
-    # ride_records = ride_records_no_text | ride_records_match_text
+    ride_records1 = Ride.objects.filter(status="open").filter(num_pax_total__lte=driver.max_num_pax).filter(vehicle_type=driver.vehicle_type)
+
+    ride_records_no_text = ride_records1.filter(special_requests__exact="")
+    ride_records_match_text = ride_records1.filter(special_requests__exact=driver.special_info)
+    ride_records = ride_records_no_text | ride_records_match_text
     
     return render(request, 'ride_search_driver.html', {'ride_records': ride_records})
 
@@ -326,9 +329,6 @@ def get_rides_driver(request):
     
     driver = Driver.objects.get(user=ride_user)
     ride_records = Ride.objects.filter(driver=driver)
-    print("records!!")
-    print(ride_records)
-    print(ride_records.first().status)
 
     return render(request, 'ride_driver.html', {'ride_records': ride_records})
 

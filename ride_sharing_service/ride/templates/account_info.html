@@ -119,6 +119,16 @@
                   <hr>
 
                   <div class="row">
+                    <div class="col-sm-5">
+                      <p class="mb-0">Special Vehicle Info (Optional)</p>
+                    </div>
+                    <div class="col-sm-7">
+                      <p class="text-muted mb-0">{% if is_driver %} {{ driver.special_info }} {% else %} --- {% endif %}</p>
+                    </div>
+                  </div>
+                  <hr>
+
+                  <div class="row">
                     <div class="col-sm-6"></div>
                     {% if is_driver %}
 

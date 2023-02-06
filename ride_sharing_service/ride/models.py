@@ -15,7 +15,7 @@ class Driver(models.Model):
     vehicle_type = models.CharField(max_length=255)
     license_plate_number = models.CharField(max_length=255)
     max_num_pax = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
-    special_info = models.TextField(null=True)
+    special_info = models.TextField(blank=True)
 
 class Ride(models.Model):
     owner = models.ForeignKey(RideUser, on_delete=models.CASCADE)
@@ -24,7 +24,7 @@ class Ride(models.Model):
     vehicle_type = models.CharField(max_length=255)
     num_pax_owner = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
     num_pax_total = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
-    special_requests = models.TextField(null=True)
+    special_requests = models.TextField(blank=True)
     is_sharable = models.BooleanField()
     STATUS_CHOICES = (
         (0, 'Open'),
@@ -34,7 +34,7 @@ class Ride(models.Model):
     status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='open')
     driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True)
     sharers = models.ManyToManyField(RideUser, related_name='shared_rides', null=True)
-    sharer_num = models.JSONField(default={})
+    sharer_num = models.JSONField(default=dict)
 
 
 class RideSharer(models.Model):

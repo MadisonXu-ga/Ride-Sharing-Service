@@ -29,7 +29,7 @@
             <div class="col-12">
                 <label for="desination" class="form-label">Destination</label>
                 <div class="input-group has-validation">
-                  <input type="text" class="form-control" id="desination" name="desination" 
+                  <input type="text" class="form-control" id="desination" name="destination" 
                   {% if ride_record.status != "open" %} readonly required {% endif %} value="{{ ride_record.destination }}">
                   <div class="invalid-feedback">
                       Your desination is required.
@@ -67,7 +67,7 @@
             <div class="col-12">
               <label for="special_info" class="form-label">Special Requests <span class="text-muted">(Optional)</span></label>
               <textarea cols="40" rows="10" class="form-control" id="special_info" name="special_info" 
-              {% if ride_record.status != "open" %} readonly required {% endif %} value="{{ ride_record.special_requests }}"></textarea>
+              {% if ride_record.status != "open" %} readonly required {% endif %}>{{ ride_record.special_requests }}</textarea>
             </div>
 
             <div class="form-check">
