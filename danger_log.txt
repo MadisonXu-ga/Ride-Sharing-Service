@@ -1,0 +1,17 @@
+01/29/2023
+Implemented the function of creating a new user account (sign up) and logging in with an existing account (sign in). But we did not encrypt user passwords, which could be easily obtained by hackers.
+
+01/31/2023
+There was a bug in the editing ride info function. When the submit button was clicked, the current record id could not be returned to views. Solution: return with <input type=hidden>.
+
+02/02/2023
+The browser reported an error when displaying sharers information. Trying to display information through {{ ride_record.sharer_num.get(sharer.user_name) }}, but found that Django's template parses the entire content in {{ }} as a string. Solution: Since the sharer_num of storing the name and number of people is a JSONField, it can be obtained directly through for key, value in sharer_num.items.
+
+02/03/2023
+Solved some problems on the front end, such as the wrong position of the form and the overlapping of displayed information.
+Improved the front-end design.
+Solved the problem that the browser reported an error when clicking Ride Status.
+
+02/04/2023
+Solved the problem that special info could not be displayed. Found that <textarea> has no value attribute. Solution: Put the content to be displayed in the middle of <textarea></textarea>.
+
